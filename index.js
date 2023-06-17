@@ -1,7 +1,8 @@
-var bcrypt = require('bcryptjs');
-class ZAIN{
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+var mongoose = require('mongoose')
 
-       
+class ZAIN{
     static async registerWithPlaintext(Model,body){
       try{
         let find=body.email
@@ -46,7 +47,7 @@ class ZAIN{
         } catch (e) {
           return e.message ;
         }
-  }
+    }
     static async loginWithJwtandUser(Model,body){
       try {
           let mailll = body.email
@@ -59,7 +60,7 @@ class ZAIN{
         } catch (e) {
           return e.message ;
         }
-  }
+    }
     static async loginWithJwtonly(Model,body){
       try {
           let mailll = body.email
@@ -72,8 +73,42 @@ class ZAIN{
         } catch (e) {
           return e.message ;
         }
-  }
-   
+    }
+    static async mongodb(url){
+        mongoose.connect(url)
+        .then(() => console.log('Connected to MongoDB Atlas'))
+        .catch((error) => console.error('Error connecting to MongoDB Atlas'));
+    }
+    static async findbyId(Model,query) {
+       let obj = await Model.find({_id:query})
+       return obj
+    }
+    static async findbyEmail(Model,query) {
+       let obj = await Model.find({email:query})
+       return obj
+    }
+    static async findbyName(Model,query) {
+       let obj = await Model.find({email:query})
+       return obj
+    }
+    static async postData(Model,body){
+      try{
+        let schema = await new Model(body)
+        await schema.save()
+        return 'Object cretead in model'
+         }catch(e){
+        return 'database error'
+      }
+    }
+    static async findByIdAndUpdate(Model,id,body){
+      try{
+          let Update = await Model.findOneAndUpdate({"_id":id},{body})
+           Update.save()
+           return Update
+      }catch(e){
+        return 'Databaase error'
+      }
+    }
 };
 
 module.exports = ZAIN

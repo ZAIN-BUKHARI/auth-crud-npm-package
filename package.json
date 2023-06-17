@@ -1,6 +1,6 @@
 {
   "name": "auth-crud",
-  "version": "0.0.1",
+  "version": "1.0.2",
   "description": "this package makes your life easy and fast in authentication apis and basic crud operations you just need to pass values rest of the work handle by this package",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/ZAIN-BUKHARI/auth-crud-npm-package#readme",
   "dependencies": {
-    "bcryptjs": "^2.4.3"
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.3.0"
   }
 }
