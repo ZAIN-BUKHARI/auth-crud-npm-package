@@ -1,7 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 var mongoose = require('mongoose')
-
+const cloudinary = require("./utils/cloudinary");
+const upload = require('./utils/multer')
+const middlewear = upload.single("image")
 class ZAIN{
     static async registerWithPlaintext(Model,body){
       try{
@@ -109,6 +111,17 @@ class ZAIN{
         return 'Databaase error'
       }
     }
+    static async uploadToCloud(){
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        return result;
+      } catch (err) {
+        return 'some issue';
+      }
+  }
+    static middle(){
+      middlewear
+  }
 };
 
 module.exports = ZAIN
