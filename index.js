@@ -2,8 +2,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 var mongoose = require('mongoose')
 const cloudinary = require("./utils/cloudinary");
-const upload = require('./utils/multer')
-const middlewear = upload.single("image")
+const multer = require("multer");
+const path = require("path");
+
 class ZAIN{
     static async registerWithPlaintext(Model,body){
       try{
@@ -111,17 +112,49 @@ class ZAIN{
         return 'Databaase error'
       }
     }
-    static async uploadToCloud(){
+    static async uploadToCloud(path){
       try {
-        const result = await cloudinary.uploader.upload(req.file.path);
+        const result = await cloudinary.uploader.upload(path);
         return result;
       } catch (err) {
         return 'some issue';
       }
-  }
-    static middle(){
-      middlewear
-  }
+    }
+    static multer(){
+    return multer({
+      storage: multer.diskStorage({
+        destination:(req,file,cb)=>{
+            cb(null,'public');
+        },
+        filename:(req,file,cb)=>{
+            // cb(null,file.fieldname + '_' + Date.now() )
+            cb(null,Date.now()+file.originalname)
+        },
+    }),
+      fileFilter: (req, file, cb) => {
+        let ext = path.extname(file.originalname);  
+        if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
+          cb(new Error("File type is not supported"), false);
+          return;
+        }
+        cb(null, true);
+      },
+    }).single("image");
+    }
+    static middlewear(){
+    return multer({
+      storage: multer.diskStorage({}),
+      fileFilter: (req, file, cb) => {
+        let ext = path.extname(file.originalname);  
+        if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
+          cb(new Error("File type is not supported"), false);
+          return;
+        }
+        cb(null, true);
+      },
+    }).single("image");
+    }
+
 };
 
 module.exports = ZAIN
